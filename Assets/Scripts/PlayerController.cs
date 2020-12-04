@@ -5,6 +5,9 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rb;
+    public Animator anim;
+    public float MaxSpeed = 5.0f;
+    public float JumpForce = 10.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -15,19 +18,36 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.A))
+        float horizontal = Input.GetAxis("Horizontal");
+        if ( horizontal!= 0) 
         {
-            rb.velocity = new Vector2(-5.0f, rb.velocity.y);
-            transform.localScale = new Vector3(-1, 1, 1);
+            rb.velocity = new Vector2(horizontal*MaxSpeed, rb.velocity.y);
+            anim.SetBool("running", true);
+            if (Input.GetAxisRaw("Horizontal") != 0) 
+            {
+                transform.localScale = new Vector3(Input.GetAxisRaw("Horizontal"), 1.0f, 1.0f);
+            }
         }
-        if (Input.GetKey(KeyCode.D))
+        else
         {
-            rb.velocity = new Vector2(5.0f, rb.velocity.y);
-            transform.localScale = new Vector3(1, 1, 1);
+            anim.SetBool("running", false);
         }
-        if (Input.GetKey(KeyCode.Space))
+
+        if (Input.GetAxisRaw("Vertical") > 0.0f) 
         {
-            rb.velocity = new Vector2(rb.velocity.x, 10.0f);
+            rb.velocity = new Vector2(rb.velocity.x, JumpForce);
+            anim.SetBool("jumping", true);
+            anim.SetBool("falling", false);
+        }
+        if (rb.velocity.y < 0.0f)
+        {
+            anim.SetBool("falling", true);
+            anim.SetBool("jumping", false);
+        }
+        if (rb.velocity.y == 0.0f)
+        {
+            anim.SetBool("falling", false);
+            anim.SetBool("jumping", false);
         }
     }
 }
