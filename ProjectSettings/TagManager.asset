@@ -3,7 +3,8 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collection
   layers:
   - Default
   - TransparentFX
@@ -44,7 +45,10 @@ TagManager:
   - name: Back
     uniqueID: 4227881237
     locked: 0
-  - name: Entity
+  - name: Environment
+    uniqueID: 3452815381
+    locked: 0
+  - name: Player
     uniqueID: 3258143273
     locked: 0
   - name: Fore
