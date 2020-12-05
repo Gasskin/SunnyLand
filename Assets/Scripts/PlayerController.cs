@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +7,7 @@ public class PlayerController : MonoBehaviour
     public Animator anim;
     public LayerMask ground;
     public Collider2D collider;
+    public Text CherryNum;
 
     public float MaxSpeed = 5.0f;
     public float JumpForce = 10.0f;
@@ -28,8 +28,8 @@ public class PlayerController : MonoBehaviour
         float horizontal = Input.GetAxis("Horizontal");
         if ( horizontal!= 0) 
         {
-            rb.velocity = new Vector2(horizontal*MaxSpeed, rb.velocity.y);
             anim.SetBool("running", true);
+            rb.velocity = new Vector2(horizontal*MaxSpeed, rb.velocity.y);
             //面向
             float direction = Input.GetAxisRaw("Horizontal");
             if (direction != 0) 
@@ -41,29 +41,45 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("running", false);
         }
-        //跳跃
-        if (Input.GetButtonDown("Jump") && canJump)  
+
+
+        //蹲伏
+        if (Input.GetButtonDown("Crouch"))
         {
-            anim.SetBool("jumping", true);
-            rb.velocity = new Vector2(rb.velocity.x, JumpForce);
-            canJump = false;
+            anim.SetBool("crouching", true);
         }
-        //跳跃、下落动画切换
-        if (anim.GetBool("jumping"))
+        else if (Input.GetButtonUp("Crouch"))
         {
-            if (rb.velocity.y < 0.0f)
+            anim.SetBool("crouching", false);
+        }
+
+        //下蹲时不可以跳跃
+        if (!anim.GetBool("crouching"))
+        {
+            //跳跃
+            if (Input.GetButtonDown("Jump") && canJump)
             {
-                anim.SetBool("falling", true);
-                anim.SetBool("jumping", false);
+                anim.SetBool("jumping", true);
+                rb.velocity = new Vector2(rb.velocity.x, JumpForce);
+                canJump = false;
             }
-        }
-        else
-        {
-            if (collider.IsTouchingLayers(ground))
+            //跳跃、下落动画切换
+            if (anim.GetBool("jumping"))
             {
-                anim.SetBool("falling", false);
-                anim.SetBool("jumping", false);
-                canJump = true;
+                if (rb.velocity.y < 0.0f)
+                {
+                    anim.SetBool("falling", true);
+                    anim.SetBool("jumping", false);
+                }
+            }
+            else
+            {
+                if (collider.IsTouchingLayers(ground))
+                {
+                    anim.SetBool("falling", false);
+                    anim.SetBool("jumping", false);
+                    canJump = true;
+                }
             }
         }
     }
@@ -74,6 +90,7 @@ public class PlayerController : MonoBehaviour
         {
             CollectionNums++;
             Destroy(collision.gameObject);
+            CherryNum.text = CollectionNums.ToString();
         }
     }
 }   
