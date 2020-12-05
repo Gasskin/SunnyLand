@@ -11,9 +11,11 @@ public class PlayerController : MonoBehaviour
 
     public float MaxSpeed = 5.0f;
     public float JumpForce = 10.0f;
+    public float HurtForce = 5.0f;
 
     bool canJump = true;
     int CollectionNums = 0;
+    bool isHurt = false;
 
     // Start is called before the first frame update
     void Start()
@@ -24,15 +26,30 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (!isHurt)
+        {
+            Move();
+            Crouch();
+            Jump();
+        }
+        if (Mathf.Abs(rb.velocity.x) < 0.1)
+        {
+            isHurt = false;
+            anim.SetBool("hurt", false);
+        }
+    }
+
+    void Move()
+    {
         //移动
         float horizontal = Input.GetAxis("Horizontal");
-        if ( horizontal!= 0) 
+        if (horizontal != 0)
         {
             anim.SetBool("running", true);
-            rb.velocity = new Vector2(horizontal*MaxSpeed, rb.velocity.y);
+            rb.velocity = new Vector2(horizontal * MaxSpeed, rb.velocity.y);
             //面向
             float direction = Input.GetAxisRaw("Horizontal");
-            if (direction != 0) 
+            if (direction != 0)
             {
                 transform.localScale = new Vector3(direction, 1.0f, 1.0f);
             }
@@ -41,18 +58,25 @@ public class PlayerController : MonoBehaviour
         {
             anim.SetBool("running", false);
         }
+    }
 
-
+    void Crouch()
+    {
         //蹲伏
         if (Input.GetButtonDown("Crouch"))
         {
+            MaxSpeed /= 2.0f;
             anim.SetBool("crouching", true);
         }
         else if (Input.GetButtonUp("Crouch"))
         {
+            MaxSpeed *= 2.0f;
             anim.SetBool("crouching", false);
         }
+    }
 
+    void Jump()
+    {
         //下蹲时不可以跳跃
         if (!anim.GetBool("crouching"))
         {
@@ -91,6 +115,30 @@ public class PlayerController : MonoBehaviour
             CollectionNums++;
             Destroy(collision.gameObject);
             CherryNum.text = CollectionNums.ToString();
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            if (anim.GetBool("falling"))
+            {
+                Destroy(collision.gameObject);
+            }
+            else
+            {
+                isHurt = true;
+                anim.SetBool("hurt", true);
+                if (transform.position.x < collision.gameObject.transform.position.x)
+                {
+                    rb.velocity = new Vector2(-HurtForce, rb.velocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(HurtForce, rb.velocity.y);
+                }
+            }
         }
     }
 }   
