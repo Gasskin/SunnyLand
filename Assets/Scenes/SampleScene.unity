@@ -419,6 +419,7 @@ GameObject:
   - component: {fileID: 166401824}
   - component: {fileID: 166401823}
   - component: {fileID: 166401826}
+  - component: {fileID: 166401827}
   m_Layer: 0
   m_Name: Frog
   m_TagString: Enemy
@@ -458,6 +459,9 @@ MonoBehaviour:
   RightTrans: {fileID: 1173639996}
   speedx: 5
   speedy: 5
+  ground:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!50 &166401824
 Rigidbody2D:
   serializedVersion: 4
@@ -556,6 +560,25 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.4946823, y: 1.1396614}
   m_EdgeRadius: 0
+--- !u!95 &166401827
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 166401821}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf704b9a654182f40a4243c4107c8ccb, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &174642431
 GameObject:
   m_ObjectHideFlags: 0
@@ -22507,26 +22530,16 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 2143948414}
     m_ColliderPaths:
-    - - X: 137400069
-        Y: 29649924
-      - X: 138650091
-        Y: 31524957
-      - X: 138650100
-        Y: 31524985
-      - X: 138650100
-        Y: 39650041
-      - X: 138650041
-        Y: 39650100
-      - X: 98949951
-        Y: 39650100
-      - X: 98949892
-        Y: 39650041
-      - X: 98949892
-        Y: 29649959
-      - X: 98949951
-        Y: 29649900
-      - X: 137400025
-        Y: 29649900
+    - - X: 138650000
+        Y: 31525000
+      - X: 138650000
+        Y: 39650000
+      - X: 98949992
+        Y: 39650000
+      - X: 98949992
+        Y: 29650000
+      - X: 137400000
+        Y: 29650000
     - - X: -138550000
         Y: 9950000
       - X: -158550000
@@ -22713,11 +22726,11 @@ CompositeCollider2D:
         Y: -69350008
   m_CompositePaths:
     m_Paths:
-    - - {x: 13.739989, y: 2.9649901}
-      - {x: 13.865009, y: 3.1525064}
-      - {x: 13.864975, y: 3.96501}
-      - {x: 9.894989, y: 3.9649749}
-      - {x: 9.895024, y: 2.9649901}
+    - - {x: 13.739985, y: 2.9650002}
+      - {x: 13.865, y: 3.1525078}
+      - {x: 13.864971, y: 3.9650002}
+      - {x: 9.8949995, y: 3.9649708}
+      - {x: 9.895029, y: 2.9650002}
     - - {x: -13.855029, y: -6.935001}
       - {x: -13.855029, y: 0.995}
       - {x: -15.855005, y: 0.9950026}
