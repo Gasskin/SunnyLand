@@ -6,8 +6,13 @@ public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rb;
     public Animator anim;
+    public LayerMask ground;
+    public Collider2D collider;
+
     public float MaxSpeed = 5.0f;
     public float JumpForce = 10.0f;
+
+    bool canJump = true;
 
     // Start is called before the first frame update
     void Start()
@@ -18,36 +23,47 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //移动
         float horizontal = Input.GetAxis("Horizontal");
         if ( horizontal!= 0) 
         {
             rb.velocity = new Vector2(horizontal*MaxSpeed, rb.velocity.y);
             anim.SetBool("running", true);
-            if (Input.GetAxisRaw("Horizontal") != 0) 
+            //面向
+            float direction = Input.GetAxisRaw("Horizontal");
+            if (direction != 0) 
             {
-                transform.localScale = new Vector3(Input.GetAxisRaw("Horizontal"), 1.0f, 1.0f);
+                transform.localScale = new Vector3(direction, 1.0f, 1.0f);
             }
         }
         else
         {
             anim.SetBool("running", false);
         }
-
-        if (Input.GetAxisRaw("Vertical") > 0.0f) 
+        //跳跃
+        if (Input.GetButtonDown("Jump") && canJump)  
         {
-            rb.velocity = new Vector2(rb.velocity.x, JumpForce);
             anim.SetBool("jumping", true);
-            anim.SetBool("falling", false);
+            rb.velocity = new Vector2(rb.velocity.x, JumpForce);
+            canJump = false;
         }
-        if (rb.velocity.y < 0.0f)
+        //跳跃、下落动画切换
+        if (anim.GetBool("jumping"))
         {
-            anim.SetBool("falling", true);
-            anim.SetBool("jumping", false);
+            if (rb.velocity.y < 0.0f)
+            {
+                anim.SetBool("falling", true);
+                anim.SetBool("jumping", false);
+            }
         }
-        if (rb.velocity.y == 0.0f)
+        else
         {
-            anim.SetBool("falling", false);
-            anim.SetBool("jumping", false);
+            if (collider.IsTouchingLayers(ground))
+            {
+                anim.SetBool("falling", false);
+                anim.SetBool("jumping", false);
+                canJump = true;
+            }
         }
     }
-}
+}   
