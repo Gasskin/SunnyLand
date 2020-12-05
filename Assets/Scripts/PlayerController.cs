@@ -77,6 +77,10 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
+        if (rb.velocity.y < 0.1 && !collider.IsTouchingLayers(ground))
+        {
+            anim.SetBool("falling", true);
+        }
         //下蹲时不可以跳跃
         if (!anim.GetBool("crouching"))
         {
@@ -84,6 +88,7 @@ public class PlayerController : MonoBehaviour
             if (Input.GetButtonDown("Jump") && canJump)
             {
                 anim.SetBool("jumping", true);
+                anim.SetBool("falling", false);
                 rb.velocity = new Vector2(rb.velocity.x, JumpForce);
                 canJump = false;
             }
