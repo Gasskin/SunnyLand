@@ -14,12 +14,15 @@ public class FrogAI : MonoBehaviour
 
     private Animator anim;
     private Collider2D collider;
+    private AudioSource deathAudio;
+
     // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
         collider = GetComponent<Collider2D>();
+        deathAudio = GetComponent<AudioSource>();
 
         left = LeftTrans.position.x;
         right = RightTrans.position.x;
@@ -84,6 +87,7 @@ public class FrogAI : MonoBehaviour
     public void DeathAnim()
     {
         anim.SetTrigger("death");
+        deathAudio.Play();
         collider.enabled = false;
         Destroy(rb);
     }

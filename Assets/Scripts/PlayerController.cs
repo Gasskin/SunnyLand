@@ -8,6 +8,9 @@ public class PlayerController : MonoBehaviour
     public LayerMask ground;
     public Collider2D collider;
     public Text CherryNum;
+    public AudioSource audioJump;
+    public AudioSource audioCollect;
+    public AudioSource audioHurt;
 
     public float MaxSpeed = 5.0f;
     public float JumpForce = 10.0f;
@@ -89,6 +92,7 @@ public class PlayerController : MonoBehaviour
             {
                 anim.SetBool("jumping", true);
                 anim.SetBool("falling", false);
+                audioJump.Play();
                 rb.velocity = new Vector2(rb.velocity.x, JumpForce);
                 canJump = false;
             }
@@ -119,6 +123,7 @@ public class PlayerController : MonoBehaviour
         {
             CollectionNums++;
             Destroy(collision.gameObject);
+            audioCollect.Play();
             CherryNum.text = CollectionNums.ToString();
         }
     }
@@ -136,6 +141,7 @@ public class PlayerController : MonoBehaviour
             {
                 isHurt = true;
                 anim.SetBool("hurt", true);
+                audioHurt.Play();
                 if (transform.position.x < collision.gameObject.transform.position.x)
                 {
                     rb.velocity = new Vector2(-HurtForce, rb.velocity.y);
