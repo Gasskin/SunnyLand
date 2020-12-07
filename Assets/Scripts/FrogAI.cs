@@ -80,4 +80,15 @@ public class FrogAI : MonoBehaviour
             anim.SetBool("falling", false);
         }
     }
+
+    public void DeathAnim()
+    {
+        anim.SetTrigger("death");
+        collider.enabled = false;
+        Destroy(rb);
+    }
+    public void Death()
+    {
+        Destroy(gameObject);
+    }
 }

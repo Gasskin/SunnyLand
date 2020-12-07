@@ -129,7 +129,8 @@ public class PlayerController : MonoBehaviour
         {
             if (anim.GetBool("falling"))
             {
-                Destroy(collision.gameObject);
+                FrogAI frog = collision.gameObject.GetComponent<FrogAI>();
+                frog.DeathAnim();
             }
             else
             {
