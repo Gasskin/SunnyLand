@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
     public Rigidbody2D rb;
@@ -11,6 +11,7 @@ public class PlayerController : MonoBehaviour
     public AudioSource audioJump;
     public AudioSource audioCollect;
     public AudioSource audioHurt;
+    public CircleCollider2D head;
 
     public float MaxSpeed = 5.0f;
     public float JumpForce = 10.0f;
@@ -70,11 +71,13 @@ public class PlayerController : MonoBehaviour
         {
             MaxSpeed /= 2.0f;
             anim.SetBool("crouching", true);
+            head.enabled = false;
         }
         else if (Input.GetButtonUp("Crouch"))
         {
             MaxSpeed *= 2.0f;
             anim.SetBool("crouching", false);
+            head.enabled = true;
         }
     }
 
@@ -126,6 +129,11 @@ public class PlayerController : MonoBehaviour
             audioCollect.Play();
             CherryNum.text = CollectionNums.ToString();
         }
+        else if(collision.tag == "DeadLine")
+        {
+            GetComponent<AudioSource>().enabled = false;
+            Invoke("Restart", 1f);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
@@ -152,5 +160,10 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    void Restart()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }   
